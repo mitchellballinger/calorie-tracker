@@ -33,15 +33,52 @@ func InitDB() (*sql.DB, error) {
 
 func InsertMeal(db *sql.DB, meal *models.Meal) (error) {
 
-	_, err := db.Exec(`INSERT INTO meals
+	result, err := db.Exec(`INSERT INTO meals
 	(description, calories, protein, carbs, fat, timestamp)
 	VALUES (?, ?, ?, ?, ?, ?)`, meal.Description, meal.Calories,
 	meal.Protein, meal.Carbs, meal.Fat, meal.Timestamp)
-
+	
+	id, err := result.LastInsertId()
 	if err != nil {
 		return err
 	}
 
+	meal.ID = int(id)
+
 	return nil
+}
+
+func GetMeals(db *sql.DB) ([]models.Meal, error) {
+	rows, err := db.Query(`SELECT id, description, calories, 
+	protein, fat, timestamp FROM meals`)
+	
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var meals []models.Meal
+
+	for rows.Next() {
+		var meal models.Meal
+		
+		err = rows.Scan(&meal.ID, &meal.Description, &meal.Calories,
+		&meal.Protein, &meal.Fat, &meal.Timestamp)
+
+		if err != nil {
+			return nil, err
+		}
+
+		meals = append(meals, meal)
+	}
+
+	err = rows.Err()
+
+	if err != nil {
+		return nil, err
+	}
+
+	return meals, nil
+
 }
 

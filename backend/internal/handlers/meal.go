@@ -45,11 +45,38 @@ func CreateMealHandler(db *sql.DB, apiKey string) http.HandlerFunc {
 
 		if err != nil {
 			fmt.Println("Error: ", err)
-			http.Error(w, "Database failure", http.StatusInternalServerError)
+			http.Error(w, "Database create meal failure", http.StatusInternalServerError)
 			return
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(map[string]string{"status": "success"})
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"status": "success",
+			"id": meal.ID,
+			"description": meal.Description,
+			"calories": meal.Calories,
+			"protein": meal.Protein,
+			"carbs": meal.Carbs,
+			"fat": meal.Fat,
+			"timestamp": meal.Timestamp,
+		})
 	}
 }
+
+func GetMealsHandler(db *sql.DB) http.HandlerFunc {
+	return func (w http.ResponseWriter, r *http.Request) {
+		meals, err := database.GetMeals(db)
+
+		if err != nil {
+			fmt.Println("Error: ", err)
+			http.Error(w, "Database get meals failure", http.StatusInternalServerError)
+			return 
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(meals)
+	}
+}
+
+
+
