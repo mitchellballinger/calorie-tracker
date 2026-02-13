@@ -26,7 +26,7 @@ class Meal {
 			protein: (json['protein'] as num).toDouble(),
 			carbs: (json['carbs'] as num).toDouble(),
 			fat: (json['fat'] as num).toDouble(),
-			timestamp: DateTime.parse(json['timestamp']),
+			timestamp: DateTime.parse(json['timestamp']).toLocal(),
 		);
 	}
 

@@ -3,10 +3,10 @@ import '../services/api_service.dart';
 import '../models/meal.dart';
 
 class MealInputScreen extends StatefulWidget {
-  const MealInputScreen({Key? key}) : super(key: key);
+	const MealInputScreen({Key? key}) : super(key: key);
 
-  @override
-  State<MealInputScreen> createState() => _MealInputScreenState();
+	@override
+	State<MealInputScreen> createState() => _MealInputScreenState();
 }
 
 class _MealInputScreenState extends State<MealInputScreen> {
@@ -54,6 +54,12 @@ class _MealInputScreenState extends State<MealInputScreen> {
 		return Scaffold(
 			appBar: AppBar(
 				title: const Text('Add Meal'),
+				actions: [
+					IconButton(
+						icon: const Icon(Icons.history),
+						onPressed: () => Navigator.pushNamed(context, '/meal-history'),
+					)
+				]
 		  ),
 			body: Padding(
 				padding: const EdgeInsets.all(16.0),

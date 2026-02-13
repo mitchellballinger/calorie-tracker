@@ -50,7 +50,7 @@ func InsertMeal(db *sql.DB, meal *models.Meal) (error) {
 
 func GetMeals(db *sql.DB) ([]models.Meal, error) {
 	rows, err := db.Query(`SELECT id, description, calories, 
-	protein, fat, timestamp FROM meals`)
+	protein, carbs, fat, timestamp FROM meals`)
 	
 	if err != nil {
 		return nil, err
@@ -63,7 +63,7 @@ func GetMeals(db *sql.DB) ([]models.Meal, error) {
 		var meal models.Meal
 		
 		err = rows.Scan(&meal.ID, &meal.Description, &meal.Calories,
-		&meal.Protein, &meal.Fat, &meal.Timestamp)
+		&meal.Protein, &meal.Carbs, &meal.Fat, &meal.Timestamp)
 
 		if err != nil {
 			return nil, err

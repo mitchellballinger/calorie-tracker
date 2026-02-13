@@ -73,6 +73,10 @@ func GetMealsHandler(db *sql.DB) http.HandlerFunc {
 			return 
 		}
 
+		if meals == nil {
+			meals = []models.Meal{}
+		}
+
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(meals)
 	}

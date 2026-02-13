@@ -41,8 +41,8 @@ func main() {
 
 	apiKey := os.Getenv("API_KEY")
 
-	http.HandleFunc("/meal", handlers.CreateMealHandler(db, apiKey))
-	http.HandleFunc("/meals", handlers.GetMealsHandler(db))
+	http.HandleFunc("/submit-meal", handlers.CreateMealHandler(db, apiKey))
+	http.HandleFunc("/get-meals", handlers.GetMealsHandler(db))
 	fmt.Println("Calling listen and serve")
 	err = http.ListenAndServe(":8080", corsMiddleware(http.DefaultServeMux))
 	if err != nil {

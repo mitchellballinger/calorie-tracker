@@ -3,13 +3,13 @@ package models
 import "time"
 
 type Meal struct {
-	ID int
-	Description string
-	Calories int
-	Protein float64
-	Carbs float64
-	Fat float64
-	Timestamp time.Time
+	ID int `json:"id"`
+	Description string `json:"description"`
+	Calories int `json:"calories"`
+	Protein float64 `json:"protein"`
+	Carbs float64 `json:"carbs"`
+	Fat float64 `json:"fat"`
+	Timestamp time.Time `json:"timestamp"` 
 }
 
 
