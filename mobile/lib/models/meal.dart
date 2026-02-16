@@ -29,7 +29,7 @@ class Meal {
 			timestamp: DateTime.parse(json['timestamp']).toLocal(),
 		);
 	}
-
+	
 
 
 }

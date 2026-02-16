@@ -27,7 +27,6 @@ class _MealHistoryScreenState extends State<MealHistoryScreen> {
 	}
 
 	Future<void> _retrieveMeals() async {
-		print('_retrieveMeals called');
 		setState(() {
 			_isLoading = true;
 			_statusMessage = '';
@@ -36,6 +35,8 @@ class _MealHistoryScreenState extends State<MealHistoryScreen> {
 
 
 		try {
+			// defaults to current date in backend right now, can pass in other dates for future
+			// filtering
 			final meals = await _apiService.getMeals();
 			setState(() => _mealList = meals..sort((a,b) => b.timestamp.compareTo(a.timestamp)));
 		}
@@ -54,8 +55,7 @@ class _MealHistoryScreenState extends State<MealHistoryScreen> {
 			appBar: AppBar(
 				title: const Text('History'),
 			),
-			body: _isLoading
-			? const Center(child: CircularProgressIndicator())
+			body: _isLoading ? const Center(child: CircularProgressIndicator())
 			: _mealList == null || _mealList!.isEmpty
 				? Center(
 					child: Text(

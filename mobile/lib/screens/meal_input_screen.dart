@@ -58,6 +58,11 @@ class _MealInputScreenState extends State<MealInputScreen> {
 					IconButton(
 						icon: const Icon(Icons.history),
 						onPressed: () => Navigator.pushNamed(context, '/meal-history'),
+					),
+
+					IconButton(
+						icon: const Icon(Icons.summarize),
+						onPressed: () => Navigator.pushNamed(context, '/meal-totals'),
 					)
 				]
 		  ),

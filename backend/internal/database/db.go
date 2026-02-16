@@ -1,6 +1,7 @@
 package database
 
 import (
+	"time"
 	"database/sql"
 	_ "github.com/mattn/go-sqlite3"
 	"calorie-tracker/internal/models"
@@ -48,9 +49,14 @@ func InsertMeal(db *sql.DB, meal *models.Meal) (error) {
 	return nil
 }
 
-func GetMeals(db *sql.DB) ([]models.Meal, error) {
+func GetMeals(db *sql.DB, date string) ([]models.Meal, error) {
+
+	if (date == "") {
+		date = time.Now().Format("2006-01-02")
+	}
+
 	rows, err := db.Query(`SELECT id, description, calories, 
-	protein, carbs, fat, timestamp FROM meals`)
+	protein, carbs, fat, timestamp FROM meals WHERE DATE(timestamp) = ?`, date)
 	
 	if err != nil {
 		return nil, err

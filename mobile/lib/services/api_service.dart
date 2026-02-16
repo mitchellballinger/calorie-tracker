@@ -28,12 +28,12 @@ class ApiService {
 		}
 	}
 
-	Future<List<Meal>> getMeals({bool forceRefresh = false}) async {
+	Future<List<Meal>> getMeals({bool forceRefresh = false, String date = ""}) async {
 		if (_cachedMeals != null && !forceRefresh) {
 			print("Cache hit");
 			return _cachedMeals!;
 		}
-		final response = await http.get(Uri.parse('$_baseUrl/get-meals'));
+		final response = await http.get(Uri.parse('$_baseUrl/get-meals?date=${date}'));
 		
 		if (response.statusCode == 200) {
 			final data = jsonDecode(response.body) as List;
@@ -47,4 +47,5 @@ class ApiService {
 		}
 		
 	}
+
 }

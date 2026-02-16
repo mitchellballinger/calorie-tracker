@@ -65,7 +65,12 @@ func CreateMealHandler(db *sql.DB, apiKey string) http.HandlerFunc {
 
 func GetMealsHandler(db *sql.DB) http.HandlerFunc {
 	return func (w http.ResponseWriter, r *http.Request) {
-		meals, err := database.GetMeals(db)
+		
+		queryParams := r.URL.Query()
+
+		date := queryParams.Get("date")
+
+		meals, err := database.GetMeals(db, date)
 
 		if err != nil {
 			fmt.Println("Error: ", err)
