@@ -49,6 +49,18 @@ class _MealHistoryScreenState extends State<MealHistoryScreen> {
 
 	}
 
+	Future<void> _deleteMeal(int id) async {
+		try {
+			await _apiService.deleteMeal(id);
+			setState(() {
+				_mealList?.removeWhere((meal) => meal.id == id);
+			});
+		}
+		catch (e) {
+			setState(() => _statusMessage = 'Failed to delete meal: $e');
+		}
+	}
+
 	@override
 	Widget build(BuildContext context) {
 		return Scaffold(
@@ -70,26 +82,37 @@ class _MealHistoryScreenState extends State<MealHistoryScreen> {
 							margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
 							child: Padding(
 								padding: const EdgeInsets.all(16.0),
-								child: Column(
+								child: Row(
 									crossAxisAlignment: CrossAxisAlignment.start,
 									children: [
-										Text(
-											meal.description,
-											style: const TextStyle(
-												fontWeight: FontWeight.bold,
-												fontSize: 16,
+										Expanded(
+											child: Column(
+												crossAxisAlignment: CrossAxisAlignment.start,
+												children: [
+													Text(
+														meal.description,
+														style: const TextStyle(
+															fontWeight: FontWeight.bold,
+															fontSize: 16,
+														),
+													),
+													const SizedBox(height: 8),
+													Text('Calories: ${meal.calories}'),
+													Text('Protein: ${meal.protein}g'),
+													Text('Carbs: ${meal.carbs}g'),
+													Text('Fat: ${meal.fat}g'),
+													Text('Date: ${meal.timestamp.month}/${meal.timestamp.day}/${meal.timestamp.year}'),
+													Text('Time:	${meal.timestamp.hour}:${meal.timestamp.minute}'),
+												],
 											),
 										),
-										const SizedBox(height: 8),
-										Text('Calories: ${meal.calories}'),
-										Text('Protein: ${meal.protein}g'),
-										Text('Carbs: ${meal.carbs}g'),
-										Text('Fat: ${meal.fat}g'),
-										Text('Date: ${meal.timestamp.month}/${meal.timestamp.day}/${meal.timestamp.year}'),
-										Text('Time:	${meal.timestamp.hour}:${meal.timestamp.minute}'),
-									],
-								),
-							),
+										IconButton(
+											icon: const Icon(Icons.delete, color: Colors.red),
+											onPressed: () => _deleteMeal(meal.id),
+										)
+									]
+								)
+							)
 						);
 					},
 				),

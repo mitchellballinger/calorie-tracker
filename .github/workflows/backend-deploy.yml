@@ -1,0 +1,25 @@
+name: Deploy backend
+
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Pull latest code
+        run: |
+          cd /home/mitchell/calorie-tracker
+          git pull origin main
+
+      - name: Build backend
+        run: |
+          cd /home/mitchell/calorie-tracker/backend
+          go build -o calorie-tracker cmd/server/main.go
+
+      - name: Restart service
+        run: sudo systemctl restart calorie-tracker
+      

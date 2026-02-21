@@ -41,12 +41,16 @@ class _MealTotalsScreenState extends State<MealTotalsScreen> {
 
 
 		try {
-			// just passing in currentDate for get meals, will refine later to be able
-			// to select all meals from different time periods
 			// need to add cached date, so if passed in date differs from cached date,
 			// we can force refresh
-			final meals = await _apiService.getMeals();
-			_calculateTotals(meals);
+			await _apiService.getMeals();
+			final totals = _apiService.calculateTotals();
+			setState(() {
+				_calorieTotal = totals['calories']!.toInt();
+				_proteinTotal = totals['protein']!;
+				_carbsTotal = totals['carbs']!;
+				_fatTotal = totals['fat']!;
+			});
 		}
 		catch (e) {
 			setState(() => _statusMessage = 'Failed to connect to server: $e');
@@ -56,18 +60,6 @@ class _MealTotalsScreenState extends State<MealTotalsScreen> {
 		}
 
 	}
-
-	void _calculateTotals(List<Meal>? meals) {
-		if (meals == null || meals.isEmpty) return;
-
-		setState(() {
-			_calorieTotal = meals.fold(0, (sum, meal) => sum + meal.calories);
-			_proteinTotal = meals.fold(0.0, (sum, meal) => sum + meal.protein);
-			_carbsTotal = meals.fold(0.0, (sum, meal) => sum + meal.carbs);
-			_fatTotal = meals.fold(0.0, (sum, meal) => sum + meal.fat);
-		});
-	}	
-
 
 
 	@override

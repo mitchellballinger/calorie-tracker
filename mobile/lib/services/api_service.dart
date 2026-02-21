@@ -48,4 +48,35 @@ class ApiService {
 		
 	}
 
+	Future<void> deleteMeal(int id) async {
+		final response = await http.post(
+			Uri.parse('$_baseUrl/delete-meal'),
+			headers: {'Content-Type': 'application/json'},
+			body: jsonEncode({'id': id}),
+		);
+		
+		if (response.statusCode == 200) {
+			_cachedMeals?.removeWhere((meal) => meal.id == id);
+			return;
+		}
+		else {
+			throw Exception('Failed to delete meals: ${response.statusCode}');
+		}
+
+	}
+
+	Map<String, double> calculateTotals() {
+		if (_cachedMeals == null || _cachedMeals!.isEmpty) {
+			return {'calories': 0, 'protein': 0, 'carbs': 0, 'fat': 0};
+		}
+
+		return {
+			'calories': _cachedMeals!.fold(0, (sum, meal) => sum + meal.calories).toDouble(),
+			'protein': _cachedMeals!.fold(0.0, (sum, meal) => sum + meal.protein),
+			'carbs': _cachedMeals!.fold(0.0, (sum, meal) => sum + meal.carbs),
+			'fat': _cachedMeals!.fold(0.0, (sum, meal) => sum + meal.fat),
+		};
+	}
+
+
 }

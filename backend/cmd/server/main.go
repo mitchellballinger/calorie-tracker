@@ -43,6 +43,7 @@ func main() {
 
 	http.HandleFunc("/submit-meal", handlers.CreateMealHandler(db, apiKey))
 	http.HandleFunc("/get-meals", handlers.GetMealsHandler(db))
+	http.HandleFunc("/delete-meal", handlers.DeleteMealHandler(db))
 	fmt.Println("Calling listen and serve")
 	err = http.ListenAndServe(":8080", corsMiddleware(http.DefaultServeMux))
 	if err != nil {

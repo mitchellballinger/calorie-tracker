@@ -15,6 +15,10 @@ type MealRequest struct {
 	Description string `json:"description"`
 }
 
+type DeleteRequest struct {
+	Id int `json:"id"`
+}
+
 func CreateMealHandler(db *sql.DB, apiKey string) http.HandlerFunc {
 	return func (w http.ResponseWriter, r *http.Request) {
 		var req MealRequest
@@ -84,6 +88,33 @@ func GetMealsHandler(db *sql.DB) http.HandlerFunc {
 
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(meals)
+	}
+}
+
+func DeleteMealHandler(db *sql.DB) http.HandlerFunc {
+	return func (w http.ResponseWriter, r *http.Request) {
+		var req DeleteRequest
+
+		err := json.NewDecoder(r.Body).Decode(&req)
+		if err != nil {
+			http.Error(w, "Invalid JSON", http.StatusBadRequest)
+			return
+		}
+
+		err = database.DeleteMeal(db, req.Id)
+
+		if err != nil {
+			fmt.Println("Error: ", err)
+			http.Error(w, "Database delete meal failure", http.StatusInternalServerError)
+			return
+		}
+
+		
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]string{"status": "success"})
+
+
+
 	}
 }
 

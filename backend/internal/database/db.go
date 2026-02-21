@@ -88,3 +88,13 @@ func GetMeals(db *sql.DB, date string) ([]models.Meal, error) {
 
 }
 
+
+func DeleteMeal(db *sql.DB, id int) (error) {
+	_, err := db.Exec(`DELETE FROM meals WHERE id = ?`, id)
+
+	if err != nil {
+		return err;
+	}
+
+	return nil
+}
